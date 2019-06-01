@@ -2,11 +2,11 @@ def main():
     import os
     #import inspect
     import time
-
+    previous_directories_list = []
     t = 0
     while True:
         template_path = os.path.dirname(os.path.abspath(__file__))
-        print('\n ' * 100)
+        print('\n ' * 5)
         print('_______________________________')
         print('[YOU AT ' + template_path + ']')
         current_directory = os.listdir()
@@ -18,12 +18,54 @@ def main():
         if t >= 1:
             selected_directory = input('Enter directory [name] to jump to it or:\nEnter <back> to return to previous directory \nEnter <remove> to remove file or folder \nEnter <refresh> to refresh directory \nEnter <create> to create file or folder > ')
             if selected_directory in ['back', 'Back']:
-                os.chdir(previous_directory)
+                t -= 1
+                print('t IN BACK IS ' + str(t))
+                print(previous_directories_list)
+                os.chdir(previous_directories_list[t-1])
+                if str(current_directory) == str(previous_directories_list[0]):
+                    print('GOT IT')
+                    previous_directories_list = []
+                else:
+                    print('NOPE, WE HAVE' + str(template_path))
+                    print('WE NEED ' + str(previous_directories_list[0]))
+                """
+                k = 0
+                if k == 0:
+                    k += 1
+                    t -= 1
+                    print('k IN BACK IS ' + str(k))
+                    print('t IN BACK IS ' + str(t))
+                    print(previous_directories_list)
+                    os.chdir(previous_directories_list[t-1])
+                    if str(current_directory) == str(previous_directories_list[0]):
+                        print('GOT IT')
+                        previous_directories_list = []
+                    else:
+                        print('NOPE, WE HAVE' + str(template_path))
+                        print('WE NEED ' + str(previous_directories_list[0]))
+                elif k > 0:
+                    t -= 1
+                    print('k IN BACK IS ' + str(k))
+                    print('t IN BACK IS ' + str(t))
+                    print(previous_directories_list)
+                    os.chdir(previous_directories_list[t-1])
+                    if str(current_directory) == str(previous_directories_list[0]):
+                        print('GOT IT')
+                        previous_directories_list = []
+                    else:
+                        print('NOPE, WE HAVE ' + str(template_path))
+                        print('WE NEED' + str(previous_directories_list[0]))
+                """
+                #os.chdir(previous_directories_list[t-1])
             elif selected_directory in current_directory:
                 previous_directory = template_path
-                directory_exists = os.path.isdir(selected_directory)
-                print(directory_exists)
+                previous_directories_list.append(template_path)
+                print('__________________________________________-')
+                print('prev dir list -- ' + str(previous_directories_list))
+                print('[t] is -- ' + str(t))
+                directory_exists = os.path.isdir(previous_directories_list[t])
                 if directory_exists == True:
+                    t += 1
                     os.chdir(selected_directory)
                 else:
                     print('It\'s not a directory. Please, select directory')
@@ -46,11 +88,13 @@ def main():
             selected_directory = input('Enter directory [name] to jump to it or:\nEnter <remove> to remove file or directory \nEnter <refresh> to refresh directory \nEnter <create> to create file or folder > ')
             if selected_directory in current_directory:
                 previous_directory = template_path
-                directory_exists = os.path.isdir(selected_directory)
-                print(directory_exists)
+                previous_directories_list.append(template_path)
+                print('____________________________________________________')
+                print('prev dir list -- ' + str(previous_directories_list))
+                directory_exists = os.path.isdir(previous_directories_list[t])
                 if directory_exists == True:
-                    os.chdir(selected_directory)
                     t += 1
+                    os.chdir(selected_directory)
             elif selected_directory in ['Remove', 'remove']:
                 deleting_file_or_directory = input('Select file or directory to remove > ')
                 os.system('rm -rf ' + deleting_file_or_directory)
