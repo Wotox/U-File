@@ -8,6 +8,16 @@ def main():
     def strings_substract(str1, str2, n=1):
         return sub(r'%s' % (str2), '', str1, n)
 
+    def user_offers():
+        print('Enter directory [name] to jump to it or')
+        print('Enter <remove> to remove file or directory')
+        print('Enter <refresh> to refresh directory')
+        print('Enter <create> to create file or folder')
+        print('Enter <inspect> to inspect file')
+        print('Enter <execute> to execute file')
+        selected_directory = input('Enter <edit> to edit any file > ')
+        return selected_directory
+
     first_path = os.path.dirname(os.path.abspath(__file__)) # inpecting path of current directory
     previous_directories_list = [] # creating empty list for storaging previous directories path
     previous_directories_list.append(first_path) # adding current directory to previous directories path
@@ -18,6 +28,7 @@ def main():
     while True:
         template_path = os.path.dirname(os.path.abspath(__file__)) # inspectiong path of current directory
         print('\n ' * 100) # creating empty place in terminal
+        os.system('clear')
         print('_______________________________')
         print('[YOU AT ' + template_path + ']')
         current_directory = os.listdir() # inspecting elements in current directory and writing them into current_directory list
@@ -38,7 +49,7 @@ def main():
             print(str(i + 1) + ". " + current_directory[i] + length_to_size_difference + str(file_size >> 10) + ' KB') # print count of every element in current directory
         #print('length to size difference : |' + length_to_size_difference + '|')
         if t >= 1: # if user has jumped to directories before OR if he is not in root directory
-            selected_directory = input('Enter directory [name] to jump to it or:\nEnter <back> to return to previous directory \nEnter <remove> to remove file or folder \nEnter <refresh> to refresh directory \nEnter <create> to create file or folder \nEnter <edit> to edit any file > ')
+            selected_directory = user_offers()
             if selected_directory in ['back', 'Back']: # if user want to return to previous directory
                 if l == 0: # if user have not returned to previous directories before
                     l = 1 # user returned to previos directory before
@@ -69,7 +80,7 @@ def main():
                 actions.actions(selected_directory)
 
         elif t == 0: # if user has not jumped to directories forward OR if user did "back" to root directory
-            selected_directory = input('Enter directory [name] to jump to it or:\nEnter <remove> to remove file or directory \nEnter <refresh> to refresh directory \nEnter <create> to create file or folder  \nEnter <edit> to edit any file > ')
+            selected_directory = user_offers()
             if selected_directory in current_directory: # if selected directory equal to any element in current directory
                 previous_directory = template_path
                 if previous_directories_list == []: # if previous directories list is empty
@@ -85,5 +96,5 @@ def main():
                     previous_directories_list.append(template_path) # add template path to previous directories list
             else:
                 actions.actions(selected_directory)
-            
+
 main() # executing main function

@@ -20,6 +20,17 @@ def actions(selected_directory):
         file_name = input('Enter file name that you want to edit > ')
         os.system('nano ' + file_name)
 
+    elif selected_directory in ['Inspect', 'inspect']:
+        file_name = input('Enter file name that you want to inspect > ')
+        print('\n' * 5)
+        os.system('cat ' + file_name)
+        input('Press <Enter> to continue > ')
+
+    elif selected_directory in ['Execute', 'execute']:
+        file_name = input('Enter file name that you want to execute > ')
+        if file_name.lower().endswith(('.py')):
+            os.system('python3 ' + file_name)
+
     else:
         print('Please, select folder or press [CTRL + C] to exit') # if user don't choose any option from offered
         time.sleep(2) # waiting 2 sec
