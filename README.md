@@ -1,6 +1,11 @@
-Ü-File (TFM)
+Ü-File
 
-WORKS ON PYTHON 3 ONLY
+For Linux systems
+Execute on Python 3 only
 
-Just execute Python script like: 
-$python3 main.py
+Now it can jump to directories, create and delete files.
+I make moving files and dirs now.
+
+U-File works register root directory that place, where main.py file is located.
+It would be good if it could execute from any place, without moving file from one directory to another, etc.
+I'm working on it.
