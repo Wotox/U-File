@@ -3,6 +3,7 @@ def main():
     import os
     import time
     from re import sub
+    import actions
 
     def strings_substract(str1, str2, n=1):
         return sub(r'%s' % (str2), '', str1, n)
@@ -64,23 +65,9 @@ def main():
                 else:
                     print('It\'s not a directory. Please, select directory')
                     time.sleep(2)
-            elif selected_directory in ['Remove', 'remove']: # offer user to remove any element in folder
-                deleting_file_or_directory = input('Select file or directory to remove > ')
-                os.system('rm -rf ' + deleting_file_or_directory)  # UNIX command to remove element
-            elif selected_directory in ['Create', 'create']: # offer user to create any element in folder
-                creating_directory =        input('Enter file name > ')
-                creating_directory_suffix = input('1).py\n2).txt\n3).html\n4).php\n5).markdown\n6).md\n7).css\n8).xml\n9)\n10)\n11)\nEnter file extension > ')
-                file_name = creating_directory + creating_directory_suffix  # whole name = file name + file extension
-                os.system('echo > ' + file_name)  # UNIX command that can be used to create file
-            elif selected_directory in ['Refresh', 'refresh']: # offer user to refresh current directory. (can be used if there is new file added not from U-File)
-                True
-            elif selected_directory in ['Edit', 'edit']:
-                file_name = input('Enter file name that you want to edit > ')
-                os.system('nano ' + file_name)
             else:
-                print('Please, select folder or press [CTRL + C] to exit') # if user don't choose any option from offere
-                time.sleep(2)
-                True
+                actions.actions(selected_directory)
+
         elif t == 0: # if user has not jumped to directories forward OR if user did "back" to root directory
             selected_directory = input('Enter directory [name] to jump to it or:\nEnter <remove> to remove file or directory \nEnter <refresh> to refresh directory \nEnter <create> to create file or folder  \nEnter <edit> to edit any file > ')
             if selected_directory in current_directory: # if selected directory equal to any element in current directory
@@ -96,22 +83,7 @@ def main():
                     else:
                         os.chdir(selected_directory) # change directory to selected
                     previous_directories_list.append(template_path) # add template path to previous directories list
-            elif selected_directory in ['Remove', 'remove']: # offer user to remove any element in folder
-                deleting_file_or_directory = input('Select file or directory to remove > ')
-                os.system('rm -rf ' + deleting_file_or_directory) # UNIX command to remove element
-            elif selected_directory in ['Create', 'create']: # offer user to create any element in folder
-                creating_directory =        input('Enter file name > ') 
-                creating_directory_suffix = input('1).py\n2).txt\n3).html\n4).php\n5).markdown\n6).md\n7).css\n8).xml\n9)\n10)\n11)\nEnter file extension > ') # file extension
-                file_name = creating_directory + creating_directory_suffix # whole name = file name + file extension
-                os.system('echo > ' + file_name) # UNIX command that can be used to create file
-            elif selected_directory in ['Refresh', 'refresh']: # offer user to refresh current directory. (can be used if there is new file added not from U-File)
-                True # just passing this branch to run code above
-            elif selected_directory in ['Edit', 'edit']:
-                file_name = input('Enter file name that you want to edit > ')
-                os.system('nano ' + file_name)
             else:
-                print('Please, select folder or press [CTRL + C] to exit') # if user don't choose any option from offered
-                time.sleep(2) # waiting 2 sec
-                True # pass
-
+                actions.actions(selected_directory)
+            
 main() # executing main function
