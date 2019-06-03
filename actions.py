@@ -1,3 +1,6 @@
+def main_refresh():
+    True
+
 def actions(selected_directory):
 
     import time

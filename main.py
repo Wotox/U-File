@@ -23,9 +23,11 @@ def main():
     previous_directories_list.append(first_path) # adding current directory to previous directories path
     t = 0 # creating counter that show how much times user jumped to directories forward
     l = 0 # counter that show how much times user entered "back"
+    m = 0 # counter that show does user need to see help message
     biggest_string_length = 0
 
     while True:
+
         template_path = os.path.dirname(os.path.abspath(__file__)) # inspectiong path of current directory
         print('\n ' * 100) # creating empty place in terminal
         os.system('clear')
@@ -49,7 +51,10 @@ def main():
             print(str(i + 1) + ". " + current_directory[i] + length_to_size_difference + str(file_size >> 10) + ' KB') # print count of every element in current directory
         #print('length to size difference : |' + length_to_size_difference + '|')
         if t >= 1: # if user has jumped to directories before OR if he is not in root directory
-            selected_directory = user_offers()
+            if m == 0:
+                selected_directory = user_offers()
+            elif m == 1:
+                selected_directory = input('Enter action > ')
             if selected_directory in ['back', 'Back']: # if user want to return to previous directory
                 if l == 0: # if user have not returned to previous directories before
                     l = 1 # user returned to previos directory before
@@ -72,7 +77,12 @@ def main():
                 directory_exists = os.path.isdir(previous_directories_list[t]) # else check is dir exists
                 if directory_exists == True:  # if dir exists
                     t += 1
-                    os.chdir(selected_directory) # change directory to selected
+                    directory_exists = os.path.isdir(selected_directory)
+                    if directory_exists == True:
+                        os.chdir(selected_directory) # change directory to selected
+                    else:
+                        print('It\'s not a directory. Please select directory')
+                        time.sleep(2)
                 else:
                     print('It\'s not a directory. Please, select directory')
                     time.sleep(2)
@@ -80,7 +90,11 @@ def main():
                 actions.actions(selected_directory)
 
         elif t == 0: # if user has not jumped to directories forward OR if user did "back" to root directory
-            selected_directory = user_offers()
+            if m == 0:
+                selected_directory = user_offers()
+                m += 1
+            elif m == 1:
+                selected_directory = input('Enter action > ')
             if selected_directory in current_directory: # if selected directory equal to any element in current directory
                 previous_directory = template_path
                 if previous_directories_list == []: # if previous directories list is empty
