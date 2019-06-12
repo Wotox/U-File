@@ -1,6 +1,7 @@
+import os
+
 def main():
 
-    import os
     import time
     from re import sub
     import actions
@@ -17,6 +18,7 @@ def main():
         print('Enter <execute> to execute file')
         selected_directory = input('Enter <edit> to edit any file > ')
         return selected_directory
+
 
     first_path = os.path.dirname(os.path.abspath(__file__)) # inpecting path of current directory
     previous_directories_list = [] # creating empty list for storaging previous directories path
@@ -111,4 +113,5 @@ def main():
             else:
                 actions.actions(selected_directory)
 
+os.chdir('/')
 main() # executing main function
