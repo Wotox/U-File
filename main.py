@@ -2,17 +2,23 @@ import os
 
 
 def get_folder_elements(element, list):
+    if os.path.isfile(os.path.abspath(element)) == False:
+        if os.path.isfile(element):
+            list.append(element)
     if os.path.isfile(element):
         element_path = os.path.abspath(element)
         list.append(element_path)
     elif os.path.isdir(element):
         folder = os.listdir(element)
         for i in range(len(folder)):
-            element_path = os.path.abspath(os.path.join(os.path.abspath(element), folder[i]))
+            temp_path = os.path.abspath(element)
+            #print(temp_path)
+            element_path = os.path.abspath(os.path.join(temp_path, folder[i]))
             if os.path.isfile(element_path):
                 list.append(element_path)
             elif os.path.isdir(element_path):
-                get_folder_elements(folder[i], list)
+                temp_path = os.path.join(element_path)
+                get_folder_elements(temp_path, list)
     return list
 
 
@@ -35,13 +41,14 @@ def removing_directory_when_go_back(dirs_list, directory):
 def main():
 
     folder_elements = []
-    os.chdir('/home/yuri/Python')
+    os.chdir('/home/yuri/Python/Testing_Polygon')
     directories_history = []
     start_directory = os.getcwd()
     directories_history.append(start_directory)
     start_directory_content = os.listdir(start_directory)
     for i in range(len(start_directory_content)):
         folder_elements = get_folder_elements(start_directory_content[i], folder_elements)
+    print(len(folder_elements))
     directory_output(start_directory_content)
 
     while True:
