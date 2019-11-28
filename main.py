@@ -41,15 +41,15 @@ def removing_directory_when_go_back(dirs_list, directory):
 def main():
 
     folder_elements = []
-    os.chdir('/home/yuri/Python/Testing_Polygon')
+    os.chdir('/home/yuri/Python')
     directories_history = []
     start_directory = os.getcwd()
     directories_history.append(start_directory)
     start_directory_content = os.listdir(start_directory)
     for i in range(len(start_directory_content)):
         folder_elements = get_folder_elements(start_directory_content[i], folder_elements)
-    print(len(folder_elements))
     directory_output(start_directory_content)
+    folder_elements = []
 
     while True:
 
@@ -61,13 +61,19 @@ def main():
             current_directory = os.getcwd()
             directories_history.append(current_directory)
             current_directory_content = os.listdir(current_directory)
+            for i in range(len(current_directory_content)):
+                folder_elements = get_folder_elements(current_directory_content[i], folder_elements)
             directory_output(current_directory_content)
+            folder_elements = []
         elif user_action == 'b':
             directories_history = removing_directory_when_go_back(directories_history, current_directory)
             previous_directory_returning(directories_history)
             current_directory = os.getcwd()
             current_directory_content = os.listdir(current_directory)
+            for i in range(len(current_directory_content)):
+                folder_elements = get_folder_elements(current_directory_content[i], folder_elements)
             directory_output(current_directory_content)
+            folder_elements = []
 
 
 if __name__ == '__main__':
