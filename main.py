@@ -1,7 +1,38 @@
 import os
+import time
+
+'''
+def order_checking(anyString, userLetter, indexes):
+    indexes.append(anyString.index(userLetter))
+    indexes.append(anyString.index(userLetter) + 1)
+    if
+'''
+
+
+
+# folders - all the folders in the current directory
+# input   - user input
+def auto_correction(folders, user_input): # function in function like in [get_folder_elements] for checking order
+
+    # matching pairs
+    pattern = ''
+    for existing_folder_index in range(len(folders)):
+        existing_folder = folders[existing_folder_index]
+        for existing_folder_letter_index in range(len(existing_folder)):
+            existing_folder_letter = existing_folder[existing_folder_letter_index]
+            for user_input_letter_index in range(len(user_input)):
+                user_input_letter = user_input[user_input_letter_index]
+                if len(pattern) <= 2:
+                    pattern += user_input_letter
+        if pattern in existing_folder:
+            if input('did you mean ' + existing_folder + ' [y/n]') == 'y':
+                return existing_folder
+
+
 
 
 def get_folder_elements(element, list):
+
     if os.path.isfile(os.path.abspath(element)) == False:
         if os.path.isfile(element):
             list.append(element)
@@ -20,11 +51,11 @@ def get_folder_elements(element, list):
                 list.append(element_path)
                 temp_path = os.path.join(element_path)
                 get_folder_elements(temp_path, list)
+
     return list
 
 
 def get_folder_size(folder):
-
 
     folder_size = os.path.getsize(folder)
     subfolders_list = get_folder_elements(folder, [])
@@ -73,7 +104,7 @@ def removing_directory_when_go_back(dirs_list, directory):
 
 def main():
 
-
+    index_list = []
     os.chdir('/home/yuri/Python')
     directories_history = []
     start_directory = os.getcwd()
@@ -87,10 +118,23 @@ def main():
 
         if user_action == 'f':
             selecting_directory = input('Enter directory name to jump to it\n>>>')
-            if input('Request ' + selecting_directory + ' size? [y/n]\n>>>') == 'y':
-                size = get_folder_size(selecting_directory)
-                print(size)
-            os.chdir(selecting_directory)
+
+            if os.path.isdir(selecting_directory):
+                if input('Request ' + selecting_directory + ' size? [y/n]\n>>>') == 'y':
+                    size = get_folder_size(selecting_directory)
+                    print(size)
+
+            if os.path.isdir(selecting_directory):
+                os.chdir(selecting_directory)
+            else:
+                correction_directory = os.getcwd()
+                correction_folders = os.listdir(correction_directory)
+                selecting_directory = auto_correction(correction_folders, selecting_directory)
+                if input('Request ' + selecting_directory + ' size? [y/n]\n>>>') == 'y':
+                    size = get_folder_size(selecting_directory)
+                    print(size)
+                os.chdir(selecting_directory)
+
             current_directory = os.getcwd()
             directories_history.append(current_directory)
             current_directory_content = os.listdir(current_directory)
