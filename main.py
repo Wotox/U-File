@@ -1,15 +1,6 @@
 import os
 import time
 
-'''
-def order_checking(anyString, userLetter, indexes):
-    indexes.append(anyString.index(userLetter))
-    indexes.append(anyString.index(userLetter) + 1)
-    if
-'''
-
-
-
 # folders - all the folders in the current directory
 # input   - user input
 def auto_correction(folders, user_input): # function in function like in [get_folder_elements] for checking order
@@ -25,13 +16,14 @@ def auto_correction(folders, user_input): # function in function like in [get_fo
                 if len(pattern) <= 2:
                     pattern += user_input_letter
         if pattern in existing_folder:
+            print(pattern)
             if input('did you mean ' + existing_folder + ' [y/n]') == 'y':
                 return existing_folder
 
+    # todo: create reversed name of directory and search from another side of word
 
 
-
-def get_folder_elements(element, list):
+def get_folder_elements(element, list, closed_folders_flag):
 
     if os.path.isfile(os.path.abspath(element)) == False:
         if os.path.isfile(element):
@@ -41,24 +33,28 @@ def get_folder_elements(element, list):
         list.append(element_path)
     elif os.path.isdir(element):
         list.append(element)
-        folder = os.listdir(element)
-        for i in range(len(folder)):
-            temp_path = os.path.abspath(element)
-            element_path = os.path.abspath(os.path.join(temp_path, folder[i]))
-            if os.path.isfile(element_path):
-                list.append(element_path)
-            elif os.path.isdir(element_path):
-                list.append(element_path)
-                temp_path = os.path.join(element_path)
-                get_folder_elements(temp_path, list)
+        if os.access(element, os.R_OK) or os.access('my_folder', os.X_OK | ox.W_OK):
+            folder = os.listdir(element)
+            for i in range(len(folder)):
+                temp_path = os.path.abspath(element)
+                element_path = os.path.abspath(os.path.join(temp_path, folder[i]))
+                if os.path.isfile(element_path):
+                    list.append(element_path)
+                elif os.path.isdir(element_path):
+                    list.append(element_path)
+                    temp_path = os.path.join(element_path)
+                    get_folder_elements(temp_path, list, closed_folders_flag)
+        else:
+            closed_folders_flag == True
+            print('u died')
 
     return list
 
 
-def get_folder_size(folder):
+def get_folder_size(folder, closed_folders_flag):
 
     folder_size = os.path.getsize(folder)
-    subfolders_list = get_folder_elements(folder, [])
+    subfolders_list = get_folder_elements(folder, [], closed_folders_flag)
     for i in range(len(subfolders_list)):
         folder_size += os.path.getsize(subfolders_list[i])
 
@@ -104,6 +100,7 @@ def removing_directory_when_go_back(dirs_list, directory):
 
 def main():
 
+    #closed_folders = False
     index_list = []
     os.chdir('/home/yuri/Python')
     directories_history = []
@@ -114,6 +111,8 @@ def main():
 
     while True:
 
+        closed_folders = False
+
         user_action = input('Back or forward? [b/f]\n>>>')
 
         if user_action == 'f':
@@ -121,7 +120,9 @@ def main():
 
             if os.path.isdir(selecting_directory):
                 if input('Request ' + selecting_directory + ' size? [y/n]\n>>>') == 'y':
-                    size = get_folder_size(selecting_directory)
+                    size = get_folder_size(selecting_directory, closed_folders)
+                    if closed_folders:
+                        print('There are closed folders. You don\'t have permissions to use them.\nNot all folders were checked.')
                     print(size)
 
             if os.path.isdir(selecting_directory):
@@ -131,7 +132,9 @@ def main():
                 correction_folders = os.listdir(correction_directory)
                 selecting_directory = auto_correction(correction_folders, selecting_directory)
                 if input('Request ' + selecting_directory + ' size? [y/n]\n>>>') == 'y':
-                    size = get_folder_size(selecting_directory)
+                    size = get_folder_size(selecting_directory, closed_folders)
+                    if closed_folders:
+                        print('There are closed folders. You don\'t have permissions to use them.\nNot all folders were checked.')
                     print(size)
                 os.chdir(selecting_directory)
 
