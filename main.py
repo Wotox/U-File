@@ -32,9 +32,9 @@ def get_folder_elements(element, list, closed_folders_flag):
         element_path = os.path.abspath(element)
         list.append(element_path)
     elif os.path.isdir(element):
-        list.append(element)
-        if os.access(element, os.R_OK) or os.access('my_folder', os.X_OK | ox.W_OK):
-            folder = os.listdir(element)
+        list.append(element)                                                         # --------IN WINDOWS ONLY---------
+        if os.access(element, os.R_OK) or os.access('my_folder', os.X_OK | os.W_OK): # if we can access folders (need for closed folder in Windows)
+            folder = os.listdir(element)                                             # which we need open and read content
             for i in range(len(folder)):
                 temp_path = os.path.abspath(element)
                 element_path = os.path.abspath(os.path.join(temp_path, folder[i]))
@@ -102,7 +102,7 @@ def main():
 
     #closed_folders = False
     index_list = []
-    os.chdir('/home/yuri/Python')
+    os.chdir('/') # starting directory
     directories_history = []
     start_directory = os.getcwd()
     directories_history.append(start_directory)
